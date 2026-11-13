@@ -46,7 +46,7 @@ npm run dev
 
 ## 决赛演示视频
 
-以下视频可直接在本页面播放：
+演示视频：
 
 https://github.com/user-attachments/assets/70a5da70-d36d-42d0-9c52-24e92a4fecb3
 
