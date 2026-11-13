@@ -44,9 +44,7 @@ npm run dev
 - Kubernetes 场景使用 [`K8S Bench/README.md`](./K8S%20Bench/README.md) 中的 AIOpsLab 工作流；它负责部署真实微服务、注入故障、生成负载并执行评测。
 - 主机运维场景使用 [`HostOpsBench/README.md`](./HostOpsBench/README.md)，覆盖 IO 高负载、日志洪泛、CPU 饱和、文件描述符泄漏、上游 HTTP 故障及 systemd 配置错误等场景。
 
-## 决赛演示视频
-
-演示视频：
+## 产品演示
 
 https://github.com/user-attachments/assets/70a5da70-d36d-42d0-9c52-24e92a4fecb3
 
