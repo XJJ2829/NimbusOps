@@ -1,0 +1,8 @@
+rule @security_control_change
+trigger
+    exec
+check
+    is_security_control_change
+enforce
+    user_inspection
+end

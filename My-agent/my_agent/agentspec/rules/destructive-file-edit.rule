@@ -1,0 +1,8 @@
+rule @destructive_file_edit
+trigger
+    any
+check
+    is_destructive_file_edit
+enforce
+    user_inspection
+end

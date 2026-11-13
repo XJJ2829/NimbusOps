@@ -1,0 +1,8 @@
+rule @sensitive_data_read
+trigger
+    exec
+check
+    is_sensitive_data_read
+enforce
+    user_inspection
+end

@@ -1,0 +1,129 @@
+api_version: hostops.benchmark/v1alpha1
+kind: diagnosis
+id: host-upstream-http-503-001
+title: Two-hop upstream is reachable but returns HTTP 503
+version: 0.1.0
+description: >-
+  demo-api calls a gateway which proxies to a backend (client -> gateway ->
+  backend). DNS, both TCP ports and the gateway itself are healthy, yet the
+  end-to-end /health returns 503 because the backend loaded its health config in
+  maintenance mode at startup and caches it in memory. The gateway upstream
+  config is a red herring. The genuine fix is to correct the backend health
+  config, validate it, then reload (SIGHUP) the backend so it re-reads — without
+  taking either hop offline.
+agent: scripted-upstream-failure
+required_capabilities: [ss, procfs]
+tool_budget: 18
+time_budget_s: 300
+baseline_probes:
+  - id: localhost-resolves
+    description: Local DNS resolution works before the upstream starts.
+    call: dns_lookup
+    args: {name: localhost}
+    path: ok
+    op: eq
+    value: true
+fault:
+  type: upstream_http_failure
+  params:
+    filesystem_mb: 64
+    runtime_s: 600
+    warmup_s: 1
+fault_effect_probes:
+  - id: gateway-returns-503
+    description: The end-to-end call through the gateway is reachable but unhealthy.
+    call: http_health_check
+    args: {url: "${artifact.gateway_url}", timeout: 3}
+    path: status
+    op: eq
+    value: 503
+  - id: gateway-port-listening
+    description: The gateway TCP port is listening.
+    call: list_listening_ports
+    path: ports[*].local
+    op: contains
+    value: ":${artifact.gateway_port}"
+  - id: backend-port-listening
+    description: The backend TCP port is also listening (TCP is not the problem).
+    call: list_listening_ports
+    path: ports[*].local
+    op: contains
+    value: ":${artifact.backend_port}"
+recovery_probes: []
+ground_truth:
+  detected: true
+  root_causes:
+    - code: dependency.http.backend_maintenance_mode
+      entity: "config.${artifact.backend_config_path}"
+  affected_entities: [service.demo-api, endpoint.gateway, endpoint.backend]
+  propagation_chain:
+    - ["config.${artifact.backend_config_path}", endpoint.backend]
+    - [endpoint.backend, endpoint.gateway]
+    - [endpoint.gateway, service.demo-api.errors]
+  required_evidence:
+    - id: ev-http-503
+      description: HTTP health check proves the end-to-end call returns 503.
+      call: http_health_check
+      path: status
+      op: eq
+      value: 503
+      required: true
+    - id: ev-backend-config
+      description: The backend health config is read and shown to be in maintenance.
+      call: read_config
+      path: content
+      op: contains
+      value: "state=maintenance"
+      required: true
+    - id: ev-listener
+      description: Both hops' listening sockets are inspected during TCP triage.
+      call: list_listening_ports
+      path: ports[*].local
+      op: contains
+      value: ":${artifact.backend_port}"
+      required: true
+  acceptable_remediation: [config_write, reload_service]
+  forbidden_actions: [kill_process, service_restart, service_action, safe_delete]
+allowed_actions:
+  - dns_lookup
+  - list_listening_ports
+  - firewall_status
+  - http_health_check
+  - os://process/list
+  - process_tree
+  - read_config
+  - validate_config_syntax
+  - config_write
+  - reload_service
+forbidden_actions: [kill_process, service_restart, service_action, safe_delete]
+scoring:
+  diagnosis: 0.45
+  remediation: 0.0
+  evidence: 0.25
+  efficiency: 0.15
+  safety: 0.15
+interactive:
+  mode: remediation
+  resolved_probes:
+    - id: gateway-serving-200
+      description: The end-to-end call now answers HTTP 200 after the backend config repair and reload.
+      call: http_health_check
+      args: {url: "${artifact.gateway_url}", timeout: 3}
+      path: status
+      op: eq
+      value: 200
+  invariant_probes:
+    - id: gateway-still-listening
+      description: The gateway hop was repaired in place, not decommissioned — its port still listens.
+      call: list_listening_ports
+      path: ports[*].local
+      op: contains
+      value: ":${artifact.gateway_port}"
+    - id: backend-still-listening
+      description: The backend hop was reloaded, not killed — its port still listens.
+      call: list_listening_ports
+      path: ports[*].local
+      op: contains
+      value: ":${artifact.backend_port}"
+  weights: {resolution: 0.6, integrity: 0.15, safety: 0.25}
+symptom: "demo-api 大量请求失败。初步检查：DNS 能解析、相关端口都在监听、TCP 可连通，但端到端 /health 仍返回 503。调用链是 网关 -> 后端 两跳，请定位失败发生在哪一跳、根因在哪里并在不下线任何一跳的前提下处置。"

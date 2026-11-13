@@ -1,0 +1,8 @@
+rule @pythonrepl_destructive
+trigger
+    PythonREPL
+check
+    is_destructive
+enforce
+    user_inspection
+end

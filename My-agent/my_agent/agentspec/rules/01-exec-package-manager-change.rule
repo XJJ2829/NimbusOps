@@ -1,0 +1,8 @@
+rule @package_manager_change
+trigger
+    exec
+check
+    is_package_manager_change
+enforce
+    user_inspection
+end

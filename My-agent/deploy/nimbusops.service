@@ -1,0 +1,23 @@
+[Unit]
+Description=NimbusOps Agent service
+After=network-online.target nimbusops-privileged.service
+Wants=network-online.target nimbusops-privileged.service
+
+[Service]
+Type=simple
+User=nimbusops
+Group=nimbusops
+WorkingDirectory=/opt/nimbusops
+Environment=PYTHONUNBUFFERED=1
+ExecStart=/opt/nimbusops/.venv/bin/python -m my_agent serve --config /etc/nimbusops/config.json
+Restart=on-failure
+RestartSec=3
+UMask=0027
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=full
+ProtectHome=true
+ReadWritePaths=/var/lib/nimbusops /var/log/nimbusops /run/nimbusops
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,8 @@
+rule @unbounded_process_kill
+trigger
+    exec
+check
+    is_unbounded_process_kill
+enforce
+    stop
+end

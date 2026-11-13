@@ -1,0 +1,397 @@
+{
+  "$defs": {
+    "AgentResult": {
+      "properties": {
+        "detected": {
+          "default": false,
+          "title": "Detected",
+          "type": "boolean"
+        },
+        "affected_entities": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Affected Entities",
+          "type": "array"
+        },
+        "root_causes": {
+          "items": {
+            "$ref": "#/$defs/ReportedRootCause"
+          },
+          "title": "Root Causes",
+          "type": "array"
+        },
+        "propagation_chain": {
+          "items": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "title": "Propagation Chain",
+          "type": "array"
+        },
+        "evidence": {
+          "items": {
+            "$ref": "#/$defs/EvidenceClaim"
+          },
+          "title": "Evidence",
+          "type": "array"
+        },
+        "remediation": {
+          "$ref": "#/$defs/RemediationReport"
+        },
+        "limitations": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Limitations",
+          "type": "array"
+        }
+      },
+      "title": "AgentResult",
+      "type": "object"
+    },
+    "EvidenceClaim": {
+      "description": "An observation the agent explicitly cites to support a conclusion.",
+      "properties": {
+        "id": {
+          "title": "Id",
+          "type": "string"
+        },
+        "source_call": {
+          "title": "Source Call",
+          "type": "string"
+        },
+        "claim": {
+          "title": "Claim",
+          "type": "string"
+        },
+        "value": {
+          "default": null,
+          "title": "Value"
+        }
+      },
+      "required": [
+        "id",
+        "source_call",
+        "claim"
+      ],
+      "title": "EvidenceClaim",
+      "type": "object"
+    },
+    "MetricBlock": {
+      "properties": {
+        "score": {
+          "title": "Score",
+          "type": "number"
+        },
+        "detail": {
+          "additionalProperties": true,
+          "title": "Detail",
+          "type": "object"
+        }
+      },
+      "required": [
+        "score"
+      ],
+      "title": "MetricBlock",
+      "type": "object"
+    },
+    "RemediationReport": {
+      "properties": {
+        "attempted": {
+          "default": false,
+          "title": "Attempted",
+          "type": "boolean"
+        },
+        "actions": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Actions",
+          "type": "array"
+        },
+        "outcome": {
+          "default": "not_applicable",
+          "enum": [
+            "recovered",
+            "not_recovered",
+            "regressed",
+            "inconclusive",
+            "not_applicable"
+          ],
+          "title": "Outcome",
+          "type": "string"
+        }
+      },
+      "title": "RemediationReport",
+      "type": "object"
+    },
+    "ReportedRootCause": {
+      "properties": {
+        "code": {
+          "title": "Code",
+          "type": "string"
+        },
+        "entity": {
+          "title": "Entity",
+          "type": "string"
+        },
+        "confidence": {
+          "default": 0.0,
+          "title": "Confidence",
+          "type": "number"
+        },
+        "evidence_ids": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Evidence Ids",
+          "type": "array"
+        }
+      },
+      "required": [
+        "code",
+        "entity"
+      ],
+      "title": "ReportedRootCause",
+      "type": "object"
+    },
+    "SafetyGate": {
+      "properties": {
+        "passed": {
+          "default": true,
+          "title": "Passed",
+          "type": "boolean"
+        },
+        "violations": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Violations",
+          "type": "array"
+        }
+      },
+      "title": "SafetyGate",
+      "type": "object"
+    },
+    "TimelineEvent": {
+      "description": "One recorded interaction on the MCP (or CLI) timeline.",
+      "properties": {
+        "seq": {
+          "title": "Seq",
+          "type": "integer"
+        },
+        "t_offset_s": {
+          "title": "T Offset S",
+          "type": "number"
+        },
+        "channel": {
+          "default": "mcp",
+          "enum": [
+            "mcp",
+            "cli"
+          ],
+          "title": "Channel",
+          "type": "string"
+        },
+        "kind": {
+          "default": "call",
+          "enum": [
+            "call",
+            "read_resource",
+            "get_prompt"
+          ],
+          "title": "Kind",
+          "type": "string"
+        },
+        "name": {
+          "title": "Name",
+          "type": "string"
+        },
+        "args": {
+          "additionalProperties": true,
+          "title": "Args",
+          "type": "object"
+        },
+        "ok": {
+          "default": true,
+          "title": "Ok",
+          "type": "boolean"
+        },
+        "status": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Status"
+        },
+        "error": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Error"
+        },
+        "duration_ms": {
+          "default": 0.0,
+          "title": "Duration Ms",
+          "type": "number"
+        }
+      },
+      "required": [
+        "seq",
+        "t_offset_s",
+        "name"
+      ],
+      "title": "TimelineEvent",
+      "type": "object"
+    }
+  },
+  "properties": {
+    "scenario_id": {
+      "title": "Scenario Id",
+      "type": "string"
+    },
+    "scenario_version": {
+      "title": "Scenario Version",
+      "type": "string"
+    },
+    "kind": {
+      "enum": [
+        "diagnosis",
+        "closed_loop"
+      ],
+      "title": "Kind",
+      "type": "string"
+    },
+    "agent": {
+      "title": "Agent",
+      "type": "string"
+    },
+    "seed": {
+      "title": "Seed",
+      "type": "integer"
+    },
+    "started_at": {
+      "title": "Started At",
+      "type": "string"
+    },
+    "duration_s": {
+      "title": "Duration S",
+      "type": "number"
+    },
+    "valid": {
+      "default": true,
+      "title": "Valid",
+      "type": "boolean"
+    },
+    "invalid_reason": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Invalid Reason"
+    },
+    "baseline_ok": {
+      "default": false,
+      "title": "Baseline Ok",
+      "type": "boolean"
+    },
+    "fault_effect_ok": {
+      "default": false,
+      "title": "Fault Effect Ok",
+      "type": "boolean"
+    },
+    "safety": {
+      "$ref": "#/$defs/SafetyGate"
+    },
+    "metrics": {
+      "additionalProperties": {
+        "$ref": "#/$defs/MetricBlock"
+      },
+      "title": "Metrics",
+      "type": "object"
+    },
+    "weighted_score": {
+      "default": 0.0,
+      "title": "Weighted Score",
+      "type": "number"
+    },
+    "episode_score": {
+      "default": 0.0,
+      "title": "Episode Score",
+      "type": "number"
+    },
+    "grade": {
+      "default": "F",
+      "title": "Grade",
+      "type": "string"
+    },
+    "capabilities": {
+      "additionalProperties": true,
+      "title": "Capabilities",
+      "type": "object"
+    },
+    "probe_results": {
+      "additionalProperties": {
+        "items": {
+          "additionalProperties": true,
+          "type": "object"
+        },
+        "type": "array"
+      },
+      "title": "Probe Results",
+      "type": "object"
+    },
+    "workload_results": {
+      "additionalProperties": true,
+      "title": "Workload Results",
+      "type": "object"
+    },
+    "timeline": {
+      "items": {
+        "$ref": "#/$defs/TimelineEvent"
+      },
+      "title": "Timeline",
+      "type": "array"
+    },
+    "agent_result": {
+      "$ref": "#/$defs/AgentResult"
+    },
+    "notes": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Notes",
+      "type": "array"
+    }
+  },
+  "required": [
+    "scenario_id",
+    "scenario_version",
+    "kind",
+    "agent",
+    "seed",
+    "started_at",
+    "duration_s"
+  ],
+  "title": "EpisodeResult",
+  "type": "object"
+}

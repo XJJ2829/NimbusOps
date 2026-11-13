@@ -1,0 +1,20 @@
+{
+  "version": 1,
+  "allowedUsers": ["nimbusops"],
+  "peerVerification": {
+    "mode": "launchd",
+    "label": "com.nimbusops.agent"
+  },
+  "actions": {
+    "flush_dns_cache": {
+      "label": "刷新 DNS 缓存",
+      "description": "向 macOS mDNSResponder 发送 HUP 信号。",
+      "category": "system",
+      "impact": "本机 DNS 缓存会被刷新",
+      "executable": "/usr/bin/killall",
+      "arguments": ["-HUP", "mDNSResponder"],
+      "parameters": {},
+      "timeout": 15
+    }
+  }
+}

@@ -1,0 +1,8 @@
+rule @exec_destructive
+trigger
+    exec
+check
+    is_destructive
+enforce
+    user_inspection
+end

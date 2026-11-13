@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <key>Label</key>
+  <string>com.nimbusops.agent</string>
+  <key>UserName</key>
+  <string>nimbusops</string>
+  <key>WorkingDirectory</key>
+  <string>/opt/nimbusops</string>
+  <key>ProgramArguments</key>
+  <array>
+    <string>/opt/nimbusops/.venv/bin/python</string>
+    <string>-m</string>
+    <string>my_agent</string>
+    <string>serve</string>
+    <string>--config</string>
+    <string>/etc/nimbusops/config.json</string>
+  </array>
+  <key>RunAtLoad</key>
+  <true/>
+  <key>KeepAlive</key>
+  <true/>
+</dict>
+</plist>

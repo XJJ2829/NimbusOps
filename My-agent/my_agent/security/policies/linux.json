@@ -1,0 +1,52 @@
+{
+  "version": 1,
+  "allowedUsers": ["nimbusops"],
+  "peerVerification": {
+    "mode": "systemd",
+    "service": "nimbusops.service"
+  },
+  "actions": {
+    "service_status": {
+      "label": "查看系统服务状态",
+      "description": "读取白名单 systemd 服务的当前状态。",
+      "category": "systemd",
+      "impact": "只读系统服务状态",
+      "executable": "/usr/bin/systemctl",
+      "arguments": ["status", "--no-pager", "{service}"],
+      "parameters": {
+        "service": {
+          "type": "string",
+          "enum": ["nginx.service", "sshd.service"],
+          "required": true
+        }
+      },
+      "timeout": 30
+    },
+    "service_restart": {
+      "label": "重启系统服务",
+      "description": "重启一个由管理员预先加入白名单的 systemd 服务。",
+      "category": "systemd",
+      "impact": "目标服务会短暂中断",
+      "executable": "/usr/bin/systemctl",
+      "arguments": ["restart", "{service}"],
+      "parameters": {
+        "service": {
+          "type": "string",
+          "enum": ["nginx.service", "sshd.service"],
+          "required": true
+        }
+      },
+      "timeout": 60
+    },
+    "flush_dns_cache": {
+      "label": "刷新 DNS 缓存",
+      "description": "刷新 systemd-resolved 管理的本机 DNS 缓存，适用于麒麟/Linux 环境。",
+      "category": "network",
+      "impact": "本机 DNS 解析缓存会被清空，后续解析会重新查询上游 DNS。",
+      "executable": "/usr/bin/resolvectl",
+      "arguments": ["flush-caches"],
+      "parameters": {},
+      "timeout": 15
+    }
+  }
+}

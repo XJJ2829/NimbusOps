@@ -1,0 +1,8 @@
+rule @network_config_change
+trigger
+    exec
+check
+    is_network_config_change
+enforce
+    user_inspection
+end

@@ -1,0 +1,8 @@
+rule @remote_code_execution
+trigger
+    exec
+check
+    is_remote_code_execution
+enforce
+    stop
+end

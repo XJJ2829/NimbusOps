@@ -1,0 +1,8 @@
+rule @protected_path_write
+trigger
+    any
+check
+    is_protected_path_write
+enforce
+    user_inspection
+end

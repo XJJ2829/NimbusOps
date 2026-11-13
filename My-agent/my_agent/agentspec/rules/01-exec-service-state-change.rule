@@ -1,0 +1,8 @@
+rule @service_state_change
+trigger
+    exec
+check
+    is_service_state_change
+enforce
+    user_inspection
+end

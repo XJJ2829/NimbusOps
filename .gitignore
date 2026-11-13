@@ -1,0 +1,12 @@
+# Local/editor metadata
+.DS_Store
+__MACOSX/
+__pycache__/
+
+# Test TLS private keys and certificates: provide these through deployment secrets.
+K8S Bench/aiopslab-applications/hotelReservation/x509/server_key.pem
+K8S Bench/aiopslab-applications/socialNetwork/keys/server.pem
+K8S Bench/aiopslab-applications/socialNetwork/keys/server.key
+K8S Bench/aiopslab-applications/socialNetwork/helm-chart/socialnetwork/ca.key
+K8S Bench/aiopslab-applications/socialNetwork/helm-chart/socialnetwork/tls.pem
+K8S Bench/aiopslab-applications/socialNetwork/helm-chart/socialnetwork/tls.key

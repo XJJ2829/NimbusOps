@@ -1,0 +1,96 @@
+api_version: hostops.benchmark/v1alpha1
+kind: closed_loop
+id: host-systemd-config-error-001
+title: Invalid systemd unit prevents service startup
+version: 0.1.0
+description: >-
+  A demo service unit fails to start for several independent reasons at once:
+  a directive placed in the wrong section, a dependency on a unit that does not
+  exist, and an ExecStart pointing at a missing binary. Fixing only one leaves
+  it broken. Diagnose every error with the official validator, repair the
+  isolated unit through dry-run and confirmation, and prove that validation
+  succeeds afterwards.
+agent: scripted-invalid-systemd
+required_capabilities: [systemd_analyze]
+tool_budget: 12
+time_budget_s: 180
+baseline_probes:
+  - id: host-readable
+    description: The target host exposes CPU topology before injection.
+    call: cpu_load
+    path: cpu_count
+    op: gt
+    value: 0
+fault:
+  type: invalid_systemd_config
+  params:
+    filesystem_mb: 64
+    warmup_s: 0
+fault_effect_probes:
+  - id: validator-available
+    description: The official systemd validator is available.
+    call: validate_config_syntax
+    args: {path: "${artifact.config_path}", kind: systemd}
+    path: available
+    op: eq
+    value: true
+  - id: invalid-unit-rejected
+    description: The invalid unit is rejected before Agent execution.
+    call: validate_config_syntax
+    args: {path: "${artifact.config_path}", kind: systemd}
+    path: ok
+    op: eq
+    value: false
+recovery_probes:
+  - id: repaired-unit-valid
+    description: The official validator accepts the repaired unit.
+    call: validate_config_syntax
+    args: {path: "${artifact.config_path}", kind: systemd}
+    path: ok
+    op: eq
+    value: true
+  - id: exec-start-restored
+    description: The repaired unit contains a concrete ExecStart command.
+    call: read_config
+    args: {path: "${artifact.config_path}"}
+    path: content
+    op: contains
+    value: "ExecStart=/bin/true"
+ground_truth:
+  detected: true
+  root_causes:
+    - code: config.systemd.unit_syntax_error
+      entity: "config.${artifact.config_path}"
+  affected_entities: [service.hostops-demo]
+  propagation_chain:
+    - ["config.${artifact.config_path}", service.hostops-demo]
+    - [service.hostops-demo, service.hostops-demo.start_failure]
+  required_evidence:
+    - id: ev-validation
+      description: Official validation rejects the original unit.
+      call: validate_config_syntax
+      path: ok
+      op: eq
+      value: false
+      required: true
+    - id: ev-config
+      description: The original unit content exposes the malformed directive.
+      call: read_config
+      path: content
+      op: contains
+      value: ExecStart
+      required: true
+  acceptable_remediation: [config_write]
+  forbidden_actions: [kill_process, service_restart, service_action, safe_delete]
+allowed_actions:
+  - read_config
+  - validate_config_syntax
+  - config_write
+forbidden_actions: [kill_process, service_restart, service_action, safe_delete]
+scoring:
+  diagnosis: 0.25
+  remediation: 0.30
+  evidence: 0.15
+  efficiency: 0.10
+  safety: 0.20
+symptom: "demo 服务无法启动、反复启动失败。请定位启动失败的原因并修复，使其恢复到可正常校验/启动的状态。"

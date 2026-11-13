@@ -1,0 +1,455 @@
+{
+  "$defs": {
+    "EvidenceTruth": {
+      "description": "A signal the agent is expected to have grounded its conclusion on.",
+      "properties": {
+        "id": {
+          "title": "Id",
+          "type": "string"
+        },
+        "description": {
+          "title": "Description",
+          "type": "string"
+        },
+        "call": {
+          "title": "Call",
+          "type": "string"
+        },
+        "path": {
+          "title": "Path",
+          "type": "string"
+        },
+        "op": {
+          "enum": [
+            "gt",
+            "ge",
+            "lt",
+            "le",
+            "eq",
+            "ne",
+            "contains",
+            "truthy",
+            "falsy"
+          ],
+          "title": "Op",
+          "type": "string"
+        },
+        "value": {
+          "default": null,
+          "title": "Value"
+        },
+        "required": {
+          "default": true,
+          "title": "Required",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "id",
+        "description",
+        "call",
+        "path",
+        "op"
+      ],
+      "title": "EvidenceTruth",
+      "type": "object"
+    },
+    "FaultSpec": {
+      "description": "Which fault injector to run and with what parameters.",
+      "properties": {
+        "type": {
+          "title": "Type",
+          "type": "string"
+        },
+        "params": {
+          "additionalProperties": true,
+          "title": "Params",
+          "type": "object"
+        }
+      },
+      "required": [
+        "type"
+      ],
+      "title": "FaultSpec",
+      "type": "object"
+    },
+    "GroundTruth": {
+      "properties": {
+        "detected": {
+          "default": true,
+          "title": "Detected",
+          "type": "boolean"
+        },
+        "root_causes": {
+          "items": {
+            "$ref": "#/$defs/RootCauseTruth"
+          },
+          "title": "Root Causes",
+          "type": "array"
+        },
+        "affected_entities": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Affected Entities",
+          "type": "array"
+        },
+        "propagation_chain": {
+          "items": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "title": "Propagation Chain",
+          "type": "array"
+        },
+        "required_evidence": {
+          "items": {
+            "$ref": "#/$defs/EvidenceTruth"
+          },
+          "title": "Required Evidence",
+          "type": "array"
+        },
+        "acceptable_remediation": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Acceptable Remediation",
+          "type": "array"
+        },
+        "forbidden_actions": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Forbidden Actions",
+          "type": "array"
+        }
+      },
+      "required": [
+        "root_causes"
+      ],
+      "title": "GroundTruth",
+      "type": "object"
+    },
+    "InteractiveSpec": {
+      "description": "Optional overrides for the interactive, human-driven session scorer.\n\nWhen omitted, the interactive scorer derives sensible defaults from the\nscenario ``kind`` (``remediation`` for ``closed_loop``, ``diagnosis`` for\nread-only scenarios) and reuses ``recovery_probes`` as the resolved-state\ngoal. Provide this block to convert a read-only scenario into a fixable one\n(set ``mode: remediation`` and list ``resolved_probes``) or to protect data\nwith ``invariant_probes``.",
+      "properties": {
+        "mode": {
+          "anyOf": [
+            {
+              "enum": [
+                "remediation",
+                "diagnosis"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Mode"
+        },
+        "resolved_probes": {
+          "items": {
+            "$ref": "#/$defs/ProbeSpec"
+          },
+          "title": "Resolved Probes",
+          "type": "array"
+        },
+        "invariant_probes": {
+          "items": {
+            "$ref": "#/$defs/ProbeSpec"
+          },
+          "title": "Invariant Probes",
+          "type": "array"
+        },
+        "weights": {
+          "additionalProperties": {
+            "type": "number"
+          },
+          "title": "Weights",
+          "type": "object"
+        }
+      },
+      "title": "InteractiveSpec",
+      "type": "object"
+    },
+    "ProbeSpec": {
+      "description": "A single machine-checkable predicate over a tool/resource result.\n\n``call`` names an MCP tool (or ``resource:<uri>``); ``args`` are its\narguments; ``expect`` is a JSONPath-lite predicate evaluated against the\nreturned JSON. Probes are used both for the steady-state baseline and to\nconfirm a fault actually took effect before the agent is invoked.",
+      "properties": {
+        "id": {
+          "title": "Id",
+          "type": "string"
+        },
+        "description": {
+          "default": "",
+          "title": "Description",
+          "type": "string"
+        },
+        "call": {
+          "title": "Call",
+          "type": "string"
+        },
+        "args": {
+          "additionalProperties": true,
+          "title": "Args",
+          "type": "object"
+        },
+        "path": {
+          "title": "Path",
+          "type": "string"
+        },
+        "op": {
+          "enum": [
+            "gt",
+            "ge",
+            "lt",
+            "le",
+            "eq",
+            "ne",
+            "contains",
+            "not_contains",
+            "truthy",
+            "falsy"
+          ],
+          "title": "Op",
+          "type": "string"
+        },
+        "value": {
+          "default": null,
+          "title": "Value"
+        }
+      },
+      "required": [
+        "id",
+        "call",
+        "path",
+        "op"
+      ],
+      "title": "ProbeSpec",
+      "type": "object"
+    },
+    "RootCauseTruth": {
+      "properties": {
+        "code": {
+          "title": "Code",
+          "type": "string"
+        },
+        "entity": {
+          "title": "Entity",
+          "type": "string"
+        },
+        "aliases": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Aliases",
+          "type": "array"
+        }
+      },
+      "required": [
+        "code",
+        "entity"
+      ],
+      "title": "RootCauseTruth",
+      "type": "object"
+    },
+    "ScoringWeights": {
+      "properties": {
+        "diagnosis": {
+          "default": 0.0,
+          "title": "Diagnosis",
+          "type": "number"
+        },
+        "remediation": {
+          "default": 0.0,
+          "title": "Remediation",
+          "type": "number"
+        },
+        "safety": {
+          "default": 0.0,
+          "title": "Safety",
+          "type": "number"
+        },
+        "evidence": {
+          "default": 0.0,
+          "title": "Evidence",
+          "type": "number"
+        },
+        "efficiency": {
+          "default": 0.0,
+          "title": "Efficiency",
+          "type": "number"
+        }
+      },
+      "title": "ScoringWeights",
+      "type": "object"
+    },
+    "WorkloadSpec": {
+      "properties": {
+        "enabled": {
+          "default": false,
+          "title": "Enabled",
+          "type": "boolean"
+        },
+        "request_rate": {
+          "default": 5.0,
+          "title": "Request Rate",
+          "type": "number"
+        },
+        "write_kb": {
+          "default": 128,
+          "title": "Write Kb",
+          "type": "integer"
+        },
+        "baseline_s": {
+          "default": 3.0,
+          "title": "Baseline S",
+          "type": "number"
+        },
+        "fault_window_s": {
+          "default": 4.0,
+          "title": "Fault Window S",
+          "type": "number"
+        },
+        "require_latency_ratio": {
+          "default": 0.0,
+          "title": "Require Latency Ratio",
+          "type": "number"
+        }
+      },
+      "title": "WorkloadSpec",
+      "type": "object"
+    }
+  },
+  "properties": {
+    "api_version": {
+      "title": "Api Version",
+      "type": "string"
+    },
+    "kind": {
+      "enum": [
+        "diagnosis",
+        "closed_loop"
+      ],
+      "title": "Kind",
+      "type": "string"
+    },
+    "id": {
+      "title": "Id",
+      "type": "string"
+    },
+    "title": {
+      "title": "Title",
+      "type": "string"
+    },
+    "version": {
+      "default": "0.1.0",
+      "title": "Version",
+      "type": "string"
+    },
+    "description": {
+      "default": "",
+      "title": "Description",
+      "type": "string"
+    },
+    "symptom": {
+      "default": "",
+      "title": "Symptom",
+      "type": "string"
+    },
+    "agent": {
+      "title": "Agent",
+      "type": "string"
+    },
+    "required_capabilities": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Required Capabilities",
+      "type": "array"
+    },
+    "tool_budget": {
+      "default": 40,
+      "title": "Tool Budget",
+      "type": "integer"
+    },
+    "time_budget_s": {
+      "default": 300.0,
+      "title": "Time Budget S",
+      "type": "number"
+    },
+    "workload": {
+      "$ref": "#/$defs/WorkloadSpec"
+    },
+    "baseline_probes": {
+      "items": {
+        "$ref": "#/$defs/ProbeSpec"
+      },
+      "title": "Baseline Probes",
+      "type": "array"
+    },
+    "fault": {
+      "$ref": "#/$defs/FaultSpec"
+    },
+    "fault_effect_probes": {
+      "items": {
+        "$ref": "#/$defs/ProbeSpec"
+      },
+      "title": "Fault Effect Probes",
+      "type": "array"
+    },
+    "recovery_probes": {
+      "items": {
+        "$ref": "#/$defs/ProbeSpec"
+      },
+      "title": "Recovery Probes",
+      "type": "array"
+    },
+    "ground_truth": {
+      "$ref": "#/$defs/GroundTruth"
+    },
+    "allowed_actions": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Allowed Actions",
+      "type": "array"
+    },
+    "forbidden_actions": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Forbidden Actions",
+      "type": "array"
+    },
+    "scoring": {
+      "$ref": "#/$defs/ScoringWeights"
+    },
+    "interactive": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/InteractiveSpec"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    }
+  },
+  "required": [
+    "api_version",
+    "kind",
+    "id",
+    "title",
+    "agent",
+    "fault",
+    "ground_truth",
+    "scoring"
+  ],
+  "title": "Scenario",
+  "type": "object"
+}

@@ -1,0 +1,76 @@
+{
+  "agents": {
+    "defaults": {
+      "workspace": "~/.my-agent/workspace",
+      "model": "openai/gpt-4.1",
+      "provider": "openai",
+      "maxTokens": 8192,
+      "contextWindowTokens": 65536,
+      "temperature": 0.1,
+      "maxToolIterations": 200,
+      "maxConcurrentSubagents": 1,
+      "maxToolResultChars": 16000,
+      "timezone": "Asia/Shanghai"
+    }
+  },
+  "providers": {
+    "openai": {
+      "apiKey": "${OPENAI_API_KEY}",
+      "apiBase": "https://api.openai.com/v1"
+    },
+    "custom": {
+      "apiKey": "",
+      "apiBase": ""
+    }
+  },
+  "gateway": {
+    "host": "127.0.0.1",
+    "port": 18790
+  },
+  "channels": {
+    "sendProgress": true,
+    "sendToolHints": true,
+    "showReasoning": true
+  },
+  "security": {
+    "agentspec": {
+      "enabled": true,
+      "rulesDir": "",
+      "inspectionTimeout": 300,
+      "failClosed": true
+    },
+    "runtimeIdentity": {
+      "enabled": false,
+      "account": "nimbusops",
+      "group": "",
+      "denyRootStartup": true,
+      "dropPrivileges": true,
+      "processUmask": "027"
+    },
+    "privilegedExecution": {
+      "enabled": true,
+      "socketPath": "/var/run/nimbusops/privileged.sock",
+      "approvalTimeout": 300,
+      "requestTimeout": 120,
+      "auditLimit": 200
+    }
+  },
+  "tools": {
+    "restrictToWorkspace": true,
+    "exec": {
+      "sandbox": "auto"
+    },
+    "mcpServers": {
+      "example": {
+        "type": "stdio",
+        "command": "npx",
+        "args": ["--yes", "@modelcontextprotocol/server-filesystem", "~/.my-agent/workspace"],
+        "env": {},
+        "cwd": "",
+        "enabledTools": ["*"],
+        "toolTimeout": 30
+      }
+    }
+  },
+  "modelPresets": {}
+}

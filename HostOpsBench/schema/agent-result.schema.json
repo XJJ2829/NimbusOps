@@ -1,0 +1,142 @@
+{
+  "$defs": {
+    "EvidenceClaim": {
+      "description": "An observation the agent explicitly cites to support a conclusion.",
+      "properties": {
+        "id": {
+          "title": "Id",
+          "type": "string"
+        },
+        "source_call": {
+          "title": "Source Call",
+          "type": "string"
+        },
+        "claim": {
+          "title": "Claim",
+          "type": "string"
+        },
+        "value": {
+          "default": null,
+          "title": "Value"
+        }
+      },
+      "required": [
+        "id",
+        "source_call",
+        "claim"
+      ],
+      "title": "EvidenceClaim",
+      "type": "object"
+    },
+    "RemediationReport": {
+      "properties": {
+        "attempted": {
+          "default": false,
+          "title": "Attempted",
+          "type": "boolean"
+        },
+        "actions": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Actions",
+          "type": "array"
+        },
+        "outcome": {
+          "default": "not_applicable",
+          "enum": [
+            "recovered",
+            "not_recovered",
+            "regressed",
+            "inconclusive",
+            "not_applicable"
+          ],
+          "title": "Outcome",
+          "type": "string"
+        }
+      },
+      "title": "RemediationReport",
+      "type": "object"
+    },
+    "ReportedRootCause": {
+      "properties": {
+        "code": {
+          "title": "Code",
+          "type": "string"
+        },
+        "entity": {
+          "title": "Entity",
+          "type": "string"
+        },
+        "confidence": {
+          "default": 0.0,
+          "title": "Confidence",
+          "type": "number"
+        },
+        "evidence_ids": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Evidence Ids",
+          "type": "array"
+        }
+      },
+      "required": [
+        "code",
+        "entity"
+      ],
+      "title": "ReportedRootCause",
+      "type": "object"
+    }
+  },
+  "properties": {
+    "detected": {
+      "default": false,
+      "title": "Detected",
+      "type": "boolean"
+    },
+    "affected_entities": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Affected Entities",
+      "type": "array"
+    },
+    "root_causes": {
+      "items": {
+        "$ref": "#/$defs/ReportedRootCause"
+      },
+      "title": "Root Causes",
+      "type": "array"
+    },
+    "propagation_chain": {
+      "items": {
+        "items": {
+          "type": "string"
+        },
+        "type": "array"
+      },
+      "title": "Propagation Chain",
+      "type": "array"
+    },
+    "evidence": {
+      "items": {
+        "$ref": "#/$defs/EvidenceClaim"
+      },
+      "title": "Evidence",
+      "type": "array"
+    },
+    "remediation": {
+      "$ref": "#/$defs/RemediationReport"
+    },
+    "limitations": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Limitations",
+      "type": "array"
+    }
+  },
+  "title": "AgentResult",
+  "type": "object"
+}

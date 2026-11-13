@@ -1,0 +1,8 @@
+rule @protected_service_change
+trigger
+    exec
+check
+    is_protected_service_change
+enforce
+    stop
+end

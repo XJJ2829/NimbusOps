@@ -1,0 +1,8 @@
+rule @kernel_or_boot_change
+trigger
+    exec
+check
+    is_kernel_or_boot_change
+enforce
+    user_inspection
+end

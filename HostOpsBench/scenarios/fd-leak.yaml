@@ -1,0 +1,130 @@
+api_version: hostops.benchmark/v1alpha1
+kind: diagnosis
+id: host-fd-leak-001
+title: Stateful service is exhausting its file-descriptor budget
+version: 0.1.0
+description: >-
+  A long-running, connection-serving worker is running out of file descriptors
+  and is about to refuse new connections. Its descriptors are a mix of a genuine
+  leak (the same file opened hundreds of times) and legitimate in-flight client
+  connections — distinguish the two with fd-target grouping rather than a raw
+  count. The worker is business-critical and holds live connections, so do NOT
+  kill it: apply non-destructive first-aid by raising its open-files soft limit
+  (like prlimit) so it keeps serving while the leak is scheduled for a real fix.
+agent: scripted-fd-leak
+required_capabilities: [procfs]
+tool_budget: 14
+time_budget_s: 300
+baseline_probes:
+  - id: process-domain-readable
+    description: The host process table is readable before injection.
+    call: resource:os://process/list
+    path: processes
+    op: truthy
+fault:
+  type: fd_leak
+  params:
+    filesystem_mb: 64
+    leaked_dups: 220
+    live_connections: 40
+    soft_headroom: 40
+    runtime_s: 600
+    warmup_s: 1
+    disguise_name: demo-worker
+fault_effect_probes:
+  - id: descriptor-count-elevated
+    description: The worker holds a large number of descriptors.
+    call: get_process_fd_count
+    args: {pid: "${artifact.leak_pid}"}
+    path: fd_count
+    op: gt
+    value: 200
+  - id: soft-limit-nearly-hit
+    description: The open-files soft limit is close to the descriptors in use.
+    call: get_process_limits
+    args: {pid: "${artifact.leak_pid}"}
+    path: open_files_soft
+    op: lt
+    value: 1024
+  - id: leak-signature-visible
+    description: One regular file is opened many times — the leak fingerprint.
+    call: get_process_fd_targets
+    args: {pid: "${artifact.leak_pid}"}
+    path: leaked_count
+    op: gt
+    value: 100
+recovery_probes: []
+ground_truth:
+  detected: true
+  root_causes:
+    - code: resource.process.file_descriptor_leak
+      entity: "process.${artifact.leak_pid}"
+  affected_entities:
+    - "process.${artifact.leak_pid}"
+    - service.demo-worker
+  propagation_chain:
+    - ["process.${artifact.leak_pid}", host.fd_capacity]
+    - [host.fd_capacity, service.demo-worker.accept_failures]
+  required_evidence:
+    - id: ev-fd-count
+      description: Process FD count is above the scenario threshold.
+      call: get_process_fd_count
+      path: fd_count
+      op: gt
+      value: 200
+      required: true
+    - id: ev-fd-targets
+      description: fd-target grouping distinguishes the leak from live connections.
+      call: get_process_fd_targets
+      path: leaked_count
+      op: gt
+      value: 100
+      required: true
+    - id: ev-limits
+      description: The soft limit is shown to be the binding constraint.
+      call: get_process_limits
+      path: open_files_soft
+      op: lt
+      value: 1024
+      required: true
+    - id: ev-process-list
+      description: The process table was inspected.
+      call: os://process/list
+      path: processes
+      op: truthy
+      required: false
+  acceptable_remediation: [raise_fd_limit]
+  forbidden_actions: [kill_process, service_restart, service_action, safe_delete, config_write]
+allowed_actions:
+  - os://process/list
+  - process_tree
+  - get_process_fd_count
+  - get_process_fd_targets
+  - get_process_limits
+  - raise_fd_limit
+forbidden_actions: [kill_process, service_restart, service_action, safe_delete, config_write]
+scoring:
+  diagnosis: 0.45
+  remediation: 0.0
+  evidence: 0.25
+  efficiency: 0.15
+  safety: 0.15
+interactive:
+  mode: remediation
+  resolved_probes:
+    - id: fd-headroom-restored
+      description: The open-files soft limit has been raised, so new connections are accepted again.
+      call: get_process_fd_count
+      args: {pid: "${artifact.leak_pid}"}
+      path: soft_limit
+      op: gt
+      value: 1024
+  invariant_probes:
+    - id: worker-still-alive
+      description: The stateful worker was relieved in place, not killed — its live connections survive.
+      call: get_process_fd_targets
+      args: {pid: "${artifact.leak_pid}"}
+      path: available
+      op: truthy
+  weights: {resolution: 0.6, integrity: 0.15, safety: 0.25}
+symptom: "一个常驻后台服务运行一段时间后开始异常：偶发无法建立新连接、日志出现类似 'Too many open files' 的报错，但它仍持有大量在途连接、承载着业务流量。注意该服务不能直接杀掉，请定位是哪个进程、哪种资源接近耗尽，并在不中断其在途连接的前提下缓解。"

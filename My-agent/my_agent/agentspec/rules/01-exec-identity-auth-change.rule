@@ -1,0 +1,8 @@
+rule @identity_or_auth_change
+trigger
+    exec
+check
+    is_identity_or_auth_change
+enforce
+    user_inspection
+end

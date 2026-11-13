@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <key>Label</key>
+  <string>com.nimbusops.privileged</string>
+  <key>ProgramArguments</key>
+  <array>
+    <string>/usr/bin/python3</string>
+    <string>/usr/local/libexec/nimbusops/privileged_helper.py</string>
+    <string>--socket</string>
+    <string>/var/run/nimbusops/privileged.sock</string>
+    <string>--policy</string>
+    <string>/etc/nimbusops/privileged-actions.json</string>
+    <string>--audit-log</string>
+    <string>/var/log/nimbusops/privileged-actions.jsonl</string>
+    <string>--socket-group</string>
+    <string>nimbusops</string>
+  </array>
+  <key>RunAtLoad</key>
+  <true/>
+  <key>KeepAlive</key>
+  <true/>
+  <key>ProcessType</key>
+  <string>Background</string>
+  <key>StandardOutPath</key>
+  <string>/var/log/nimbusops/privileged-helper.log</string>
+  <key>StandardErrorPath</key>
+  <string>/var/log/nimbusops/privileged-helper.log</string>
+</dict>
+</plist>

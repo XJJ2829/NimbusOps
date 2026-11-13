@@ -1,0 +1,28 @@
+[Unit]
+Description=NimbusOps controlled privileged action helper
+After=local-fs.target
+
+[Service]
+Type=simple
+User=root
+Group=root
+UMask=0077
+RuntimeDirectory=nimbusops
+RuntimeDirectoryMode=0750
+RuntimeDirectoryPreserve=yes
+LogsDirectory=nimbusops
+LogsDirectoryMode=0700
+ExecStart=/usr/bin/python3 /usr/local/libexec/nimbusops/privileged_helper.py --socket /var/run/nimbusops/privileged.sock --policy /etc/nimbusops/privileged-actions.json --audit-log /var/log/nimbusops/privileged-actions.jsonl --socket-group nimbusops
+Restart=on-failure
+RestartSec=2
+PrivateTmp=true
+ProtectHome=true
+ProtectKernelTunables=true
+ProtectKernelModules=true
+ProtectControlGroups=true
+RestrictAddressFamilies=AF_UNIX
+LockPersonality=true
+MemoryDenyWriteExecute=true
+
+[Install]
+WantedBy=multi-user.target
