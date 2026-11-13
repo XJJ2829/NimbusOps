@@ -9,7 +9,8 @@
   <a href="#核心能力">核心能力</a> ·
   <a href="#系统架构">系统架构</a> ·
   <a href="#快速开始">快速开始</a> ·
-  <a href="#产品演示">产品演示</a>
+  <a href="#产品演示">产品演示</a> ·
+  <a href="#开源致谢">开源致谢</a>
 </p>
 
 ---
@@ -82,3 +83,13 @@ WebUI 默认地址：`http://127.0.0.1:5173`
 ## 产品演示
 
 https://github.com/user-attachments/assets/70a5da70-d36d-42d0-9c52-24e92a4fecb3
+
+## 开源致谢
+
+NimbusOps 在开源社区成果之上构建，并向所有原作者和贡献者致谢：
+
+- **Agent Runtime**：基于 [HKUDS/nanobot](https://github.com/HKUDS/nanobot) 的设计与部分实现进行适配，遵循 MIT License。
+- **Kubernetes 评测基线**：基于 [Microsoft AIOpsLab](https://github.com/microsoft/AIOpsLab) 改造，遵循 MIT License；相关原始许可证和 NOTICE 已保留在 [`K8S Bench`](./K8S%20Bench) 目录中。
+- **操作护栏**：`Action Guardrails` 中的部分实现改编自 [forge-guardrails](https://github.com/antoinezambelli/forge)，遵循 MIT License。
+
+完整的第三方组件、版权归属和许可证文本见 [THIRD_PARTY_NOTICES.md](./THIRD_PARTY_NOTICES.md)。
