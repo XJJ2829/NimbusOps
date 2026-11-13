@@ -1,6 +1,6 @@
-# My-agent WebUI
+# NimbusOps WebUI
 
-This directory contains the original `nanobot-main/webui` React WebUI migrated into My-agent. The UI structure, components, settings surface, chat layout, streaming display, tool activity view, skills view, and session sidebar come from the original WebUI; the gateway URLs and build output have been adapted for `my_agent`.
+This directory contains the React WebUI for NimbusOps Agent. The UI structure, components, settings surface, chat layout, streaming display, tool activity view, skills view, and session sidebar come from the original WebUI; the gateway URLs and build output have been adapted for `my_agent`.
 
 ## Layout
 
@@ -14,14 +14,14 @@ webui/dist/  production build served by python -m my_agent serve
 Start the backend from the project root:
 
 ```bash
-cd /Users/xujunjie/Desktop/个人文件/软件杯/Harness-Agent/My-agent
+cd /path/to/NimbusOps/nimbusops-agent
 python -m my_agent serve
 ```
 
 Start the WebUI dev server in another terminal:
 
 ```bash
-cd /Users/xujunjie/Desktop/个人文件/软件杯/Harness-Agent/My-agent/webui
+cd /path/to/NimbusOps/nimbusops-agent/webui
 npm install
 npm run dev
 ```
@@ -47,7 +47,7 @@ MY_AGENT_API_URL=http://127.0.0.1:19000 npm run dev
 ## Production Build
 
 ```bash
-cd /Users/xujunjie/Desktop/个人文件/软件杯/Harness-Agent/My-agent/webui
+cd /path/to/NimbusOps/nimbusops-agent/webui
 npm install
 npm run build
 ```
@@ -55,7 +55,7 @@ npm run build
 The build writes to `webui/dist`. Restart the backend after building:
 
 ```bash
-cd /Users/xujunjie/Desktop/个人文件/软件杯/Harness-Agent/My-agent
+cd /path/to/NimbusOps/nimbusops-agent
 python -m my_agent serve
 ```
 
@@ -68,6 +68,6 @@ http://127.0.0.1:18790
 ## Test
 
 ```bash
-cd /Users/xujunjie/Desktop/个人文件/软件杯/Harness-Agent/My-agent/webui
+cd /path/to/NimbusOps/nimbusops-agent/webui
 npm test
 ```

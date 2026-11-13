@@ -1,5 +1,5 @@
 {
-  "name": "my-agent-webui",
+  "name": "nimbusops-webui",
   "private": true,
   "version": "0.1.0",
   "type": "module",

@@ -110,7 +110,7 @@ class ModelPresetConfig(Base):
 class AgentDefaults(Base):
     """Default agent configuration."""
 
-    workspace: str = "~/.my-agent/workspace"
+    workspace: str = "~/.nimbusops/workspace"
     model_preset: str | None = None  # Active preset name — takes precedence over fields below
     model: str = "custom/gpt-4.1"
     provider: str = (

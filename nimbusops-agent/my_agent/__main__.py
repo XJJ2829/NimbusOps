@@ -1,4 +1,4 @@
-"""Command line entry point for My-agent."""
+"""Command line entry point for NimbusOps."""
 
 from __future__ import annotations
 
@@ -17,21 +17,21 @@ from my_agent.server.app import create_app
 
 
 def _default_config_path() -> Path:
-    return Path.home() / ".my-agent" / "config.json"
+    return Path.home() / ".nimbusops" / "config.json"
 
 
 def _require_websocket_runtime() -> None:
     if find_spec("websockets") is not None or find_spec("wsproto") is not None:
         return
     raise SystemExit(
-        "My-agent requires WebSocket support, but no WebSocket runtime is installed.\n"
+        "NimbusOps requires WebSocket support, but no WebSocket runtime is installed.\n"
         "Install the project dependencies in the active virtual environment:\n"
         '  python -m pip install -e "."'
     )
 
 
 def main(argv: list[str] | None = None) -> None:
-    parser = argparse.ArgumentParser(prog="my-agent")
+    parser = argparse.ArgumentParser(prog="nimbusops")
     subcommands = parser.add_subparsers(dest="command")
 
     serve = subcommands.add_parser("serve", help="Start the B/S server.")

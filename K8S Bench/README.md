@@ -38,16 +38,16 @@ Baseline Agent 工具注册给 NimbusOps。AIOpsLab 的角色是：
 ```text
 Harness-Agent/
 ├── AIOpsLab-main/
-└── My-agent/
+└── nimbusops-agent/
 ```
 
 日常测试命令从 NimbusOps 项目目录执行：
 
 ```bash
-cd /Users/xujunjie/Desktop/个人文件/软件杯/Harness-Agent/My-agent
+cd /path/to/NimbusOps/nimbusops-agent
 ```
 
-`My-agent/scripts` 中的 AIOpsLab 终端脚本默认寻找：
+`nimbusops-agent/scripts` 中的 AIOpsLab 终端脚本默认寻找：
 
 ```text
 ../AIOpsLab-main
@@ -64,9 +64,9 @@ export AIOPSLAB_PYTHON=/实际路径/AIOpsLab-main/.venv/bin/python
 
 当前工程相对原始 AIOpsLab 的重点变化：
 
-- 使用 `My-agent/scripts/aiopslab_start.py` 启动真实故障场景。
-- 使用 `My-agent/scripts/aiopslab_eval.py` 独立评测当前场景。
-- 使用 `My-agent/scripts/aiopslab_cleanup.py` 分层清理场景和平台环境。
+- 使用 `nimbusops-agent/scripts/aiopslab_start.py` 启动真实故障场景。
+- 使用 `nimbusops-agent/scripts/aiopslab_eval.py` 独立评测当前场景。
+- 使用 `nimbusops-agent/scripts/aiopslab_cleanup.py` 分层清理场景和平台环境。
 - 默认 cleanup 只清理实验场景，保留 kind、OpenEBS、observe、Prometheus 和 Helm 平台组件。
 - 新增 `--reset-scenario`，用于删除业务 namespace、重新部署 app、重新注入同一故障，适合反复演示。
 - `KubeCtl` 支持 kind 默认 context，也支持通过 `AIOPSLAB_CLUSTER` 指定并行 kind 集群 context。
@@ -190,10 +190,10 @@ kubectl get namespaces
 
 ## 标准测试流程
 
-所有命令从 `My-agent` 目录执行：
+所有命令从 `nimbusops-agent` 目录执行：
 
 ```bash
-cd /Users/xujunjie/Desktop/个人文件/软件杯/Harness-Agent/My-agent
+cd /path/to/NimbusOps/nimbusops-agent
 ```
 
 ### 1. 启动故障场景
@@ -455,7 +455,7 @@ http://localhost:16686
 本地状态文件：
 
 ```text
-/Users/xujunjie/Desktop/个人文件/软件杯/Harness-Agent/My-agent/.aiopslab-terminal/state.json
+/path/to/NimbusOps/nimbusops-agent/.aiopslab-terminal/state.json
 ```
 
 如果显式采集 metrics，会导出到：

@@ -1,11 +1,11 @@
 from my_agent.config.schema import Config
 
 
-def test_default_paths_are_my_agent_paths():
+def test_default_paths_are_nimbusops_paths():
     config = Config.model_validate({"agents": {"defaults": {"provider": "custom"}}})
 
-    assert config.agents.defaults.workspace == "~/.my-agent/workspace"
-    assert config.agents.defaults.bot_name == "My-agent"
+    assert config.agents.defaults.workspace == "~/.nimbusops/workspace"
+    assert config.agents.defaults.bot_name == "NimbusOps"
     assert config.gateway.host == "127.0.0.1"
     assert config.gateway.port == 18790
 

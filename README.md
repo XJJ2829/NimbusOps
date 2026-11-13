@@ -6,7 +6,7 @@ NimbusOps 是面向复杂运维场景的安全智能运维 Agent 项目。项目
 
 | 目录 | 说明 |
 | --- | --- |
-| [`My-agent`](./My-agent) | NimbusOps 主服务源码：Python 服务端、Agent 运行时、安全策略与 React WebUI。 |
+| [`nimbusops-agent`](./nimbusops-agent) | NimbusOps 主服务源码：Python 服务端、Agent 运行时、安全策略与 React WebUI。 |
 | [`K8S Bench`](./K8S%20Bench) | AIOpsLab Kubernetes 故障现场生成与评测环境。 |
 | [`HostOpsBench`](./HostOpsBench) | 主机运维场景测试框架，含故障注入、调用轨迹和评分报告。 |
 | 决赛演示视频 | 本 README 中可直接播放。 |
@@ -18,13 +18,13 @@ NimbusOps 是面向复杂运维场景的安全智能运维 Agent 项目。项目
 需要 Python 3.11 或 3.12，以及 Node.js/npm（用于 WebUI）。
 
 ```bash
-cd My-agent
+cd nimbusops-agent
 python -m venv .venv
 source .venv/bin/activate
 python -m pip install --upgrade pip
 python -m pip install -e .
-my-agent init-config
-my-agent serve
+nimbusops init-config
+nimbusops serve
 ```
 
 服务默认监听 `http://127.0.0.1:18790`。
@@ -32,7 +32,7 @@ my-agent serve
 开发 WebUI：
 
 ```bash
-cd My-agent/webui
+cd nimbusops-agent/webui
 npm ci
 npm run dev
 ```

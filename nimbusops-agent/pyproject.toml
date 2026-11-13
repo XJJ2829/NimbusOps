@@ -1,12 +1,12 @@
 [project]
-name = "my-agent"
+name = "nimbusops-agent"
 version = "0.1.0"
 description = "A browser/server Agent project built from nanobot core, tools, providers, and config systems."
 readme = { file = "README.md", content-type = "text/markdown" }
 requires-python = ">=3.11"
 license = { text = "MIT" }
 authors = [
-  { name = "My-agent contributors" }
+  { name = "NimbusOps contributors" }
 ]
 keywords = ["ai", "agent", "mcp", "websocket", "fastapi"]
 classifiers = [
@@ -77,7 +77,7 @@ dev = [
 ]
 
 [project.scripts]
-my-agent = "my_agent.__main__:main"
+nimbusops = "my_agent.__main__:main"
 nimbusops-privileged-helper = "my_agent.security.privileged_helper:main"
 nimbusops-helper = "my_agent.security.privileged_setup:main"
 

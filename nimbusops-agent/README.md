@@ -1,6 +1,6 @@
-# My-agent
+# NimbusOps Agent
 
-My-agent is a Python backend plus React WebUI project.
+NimbusOps Agent is a Python backend plus React WebUI project.
 
 ## Runtime
 
@@ -52,8 +52,8 @@ The production build writes to `webui/dist`. The directory is generated output a
 From the project root with the Python virtual environment activated:
 
 ```bash
-my-agent init-config
-my-agent serve
+nimbusops init-config
+nimbusops serve
 ```
 
 Then open:
@@ -65,7 +65,7 @@ http://127.0.0.1:18790
 For WebUI development, run the backend and the Vite dev server separately:
 
 ```bash
-my-agent serve
+nimbusops serve
 ```
 
 ```bash
