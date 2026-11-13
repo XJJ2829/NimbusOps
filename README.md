@@ -10,7 +10,8 @@
   <a href="#系统架构">系统架构</a> ·
   <a href="#快速开始">快速开始</a> ·
   <a href="#产品演示">产品演示</a> ·
-  <a href="#开源致谢">开源致谢</a>
+  <a href="#开源致谢">开源致谢</a> ·
+  <a href="#许可证">许可证</a>
 </p>
 
 ---
@@ -93,3 +94,7 @@ NimbusOps 在开源社区成果之上构建，并向所有原作者和贡献者�
 - **操作护栏**：`Action Guardrails` 中的部分实现改编自 [forge-guardrails](https://github.com/antoinezambelli/forge)，遵循 MIT License。
 
 完整的第三方组件、版权归属和许可证文本见 [THIRD_PARTY_NOTICES.md](./THIRD_PARTY_NOTICES.md)。
+
+## 许可证
+
+NimbusOps 自有代码采用 [Apache License 2.0](./LICENSE) 发布；第三方组件继续遵循其各自的许可证与署名要求。
