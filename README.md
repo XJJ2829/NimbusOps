@@ -9,7 +9,6 @@ NimbusOps 是面向复杂运维场景的安全智能运维 Agent 项目。项目
 | [`nimbusops-agent`](./nimbusops-agent) | NimbusOps 主服务源码：Python 服务端、Agent 运行时、安全策略与 React WebUI。 |
 | [`K8S Bench`](./K8S%20Bench) | AIOpsLab Kubernetes 故障现场生成与评测环境。 |
 | [`HostOpsBench`](./HostOpsBench) | 主机运维场景测试框架，含故障注入、调用轨迹和评分报告。 |
-| 决赛演示视频 | 本 README 中可直接播放。 |
 
 ## 快速开始
 
@@ -47,7 +46,3 @@ npm run dev
 ## 产品演示
 
 https://github.com/user-attachments/assets/70a5da70-d36d-42d0-9c52-24e92a4fecb3
-
-## 安全说明
-
-项目中用于本地测试的 TLS 私钥和私有证书不纳入仓库，需通过部署环境的密钥管理方式提供。
