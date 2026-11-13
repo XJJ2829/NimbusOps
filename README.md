@@ -30,16 +30,9 @@ NimbusOps 将运维 Agent 运行时、操作安全控制与可重复评测组合
 
 ## 系统架构
 
-```mermaid
-flowchart LR
-    U[运维人员] --> W[WebUI / CLI]
-    W --> A[NimbusOps Agent Runtime]
-    A --> G[安全控制与 AgentSpec]
-    A --> M[MCP 工具与服务]
-    M --> E[主机与 Kubernetes 环境]
-    E --> B[HostOpsBench / K8S Bench]
-    B --> R[评测报告与调用轨迹]
-```
+<p align="center">
+  <img src="./docs/images/nimbusops-architecture.png" alt="NimbusOps Agent Runtime 架构流程图" width="100%" />
+</p>
 
 ## 仓库结构
 
@@ -89,7 +82,3 @@ WebUI 默认地址：`http://127.0.0.1:5173`
 ## 产品演示
 
 https://github.com/user-attachments/assets/70a5da70-d36d-42d0-9c52-24e92a4fecb3
-
-## 安全说明
-
-用于本地测试的 TLS 私钥和私有证书不纳入仓库；部署时请通过环境变量、密钥管理服务或平台 Secret 提供敏感配置。
