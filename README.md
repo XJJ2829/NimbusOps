@@ -1,57 +1,57 @@
 <div align="center">
   <img src="./nimbusops-agent/webui/public/brand/NimbusOps-256.png" width="104" alt="NimbusOps logo" />
   <h1>NimbusOps</h1>
-  <p><strong>安全、可验证的智能运维 Agent</strong></p>
-  <p>面向主机与 Kubernetes 故障场景的诊断、处置与评测平台。</p>
+  <p><strong>A secure, verifiable AI agent for operations</strong></p>
+  <p>A platform for diagnosing, remediating, and evaluating failures across hosts and Kubernetes environments.</p>
 </div>
 
 <p align="center">
-  <a href="#核心能力">核心能力</a> ·
-  <a href="#系统架构">系统架构</a> ·
-  <a href="#快速开始">快速开始</a> ·
-  <a href="#产品演示">产品演示</a> ·
-  <a href="#开源致谢">开源致谢</a> ·
-  <a href="#许可证">许可证</a>
+  <a href="#key-capabilities">Capabilities</a> ·
+  <a href="#architecture">Architecture</a> ·
+  <a href="#quick-start">Quick Start</a> ·
+  <a href="#product-demo">Demo</a> ·
+  <a href="#open-source-acknowledgements">Acknowledgements</a> ·
+  <a href="#license">License</a>
 </p>
 
 ---
 
-## 项目概览
+## Overview
 
-NimbusOps 将运维 Agent 运行时、操作安全控制与可重复评测组合在同一工程中。它提供 WebUI 和服务端运行时，并通过真实 Kubernetes 与主机故障场景验证诊断过程、工具调用及处置结果。
+NimbusOps brings together an operations-agent runtime, execution safeguards, and repeatable evaluation in one project. It provides a WebUI and service runtime, validated against real Kubernetes and host failure scenarios for diagnosis, tool execution, and remediation outcomes.
 
-## 核心能力
+## Key Capabilities
 
-| 能力 | 说明 |
+| Capability | Description |
 | --- | --- |
-| 智能诊断 | 基于工具调用、日志、指标与上下文完成故障定位和影响分析。 |
-| 安全执行 | 通过 AgentSpec 规则、操作确认与受保护目标约束高风险行为。 |
-| MCP 集成 | 支持面向运维工具和服务的 MCP 连接、调用轨迹与配置管理。 |
-| 可视化交互 | 提供 WebUI，用于会话、任务进度、工具活动和运行状态查看。 |
-| 可验证评测 | 提供主机与 Kubernetes 基准环境，覆盖故障注入、结果评分与报告输出。 |
+| Intelligent diagnosis | Locates faults and analyzes impact from tool calls, logs, metrics, and context. |
+| Guarded execution | Constrains high-risk actions with AgentSpec rules, execution confirmation, and protected-target controls. |
+| MCP integration | Supports MCP connections for operations tools and services, with call traces and configuration management. |
+| Visual operations | Provides a WebUI for conversations, task progress, tool activity, and runtime status. |
+| Verifiable evaluation | Includes host and Kubernetes benchmark environments for fault injection, scoring, and report generation. |
 
-## 系统架构
+## Architecture
 
 <p align="center">
-  <img src="./docs/images/nimbusops-architecture.png" alt="NimbusOps Agent Runtime 架构流程图" width="100%" />
+  <img src="./docs/images/nimbusops-architecture-en.png" alt="NimbusOps Agent Runtime architecture flowchart" width="100%" />
 </p>
 
-## 仓库结构
+## Repository Structure
 
-| 目录 | 内容 |
+| Directory | Contents |
 | --- | --- |
-| [`nimbusops-agent`](./nimbusops-agent) | 主服务源码：Agent 运行时、安全策略、MCP 集成与 React WebUI。 |
-| [`K8S Bench`](./K8S%20Bench) | 基于 AIOpsLab 的 Kubernetes 故障现场生成与评测工作流。 |
-| [`HostOpsBench`](./HostOpsBench) | 主机运维基准框架：故障注入、轨迹记录、评分与报告。 |
+| [`nimbusops-agent`](./nimbusops-agent) | Main service source: agent runtime, safety policies, MCP integration, and React WebUI. |
+| [`K8S Bench`](./K8S%20Bench) | Kubernetes fault-scenario generation and evaluation workflow based on AIOpsLab. |
+| [`HostOpsBench`](./HostOpsBench) | Host-operations benchmark framework for fault injection, trace collection, scoring, and reports. |
 
-## 快速开始
+## Quick Start
 
-### 环境要求
+### Prerequisites
 
-- Python 3.11 或 3.12
-- Node.js 与 npm（WebUI 开发时需要）
+- Python 3.11 or 3.12
+- Node.js and npm (for WebUI development)
 
-### 启动服务
+### Start the Service
 
 ```bash
 cd nimbusops-agent
@@ -64,9 +64,9 @@ nimbusops init-config
 nimbusops serve
 ```
 
-服务默认地址：`http://127.0.0.1:18790`
+The service listens on `http://127.0.0.1:18790` by default.
 
-### 启动 WebUI 开发环境
+### Start the WebUI Development Server
 
 ```bash
 cd nimbusops-agent/webui
@@ -74,27 +74,27 @@ npm ci
 npm run dev
 ```
 
-WebUI 默认地址：`http://127.0.0.1:5173`
+The WebUI development server runs on `http://127.0.0.1:5173` by default.
 
-## 测试与评测
+## Testing and Evaluation
 
-- [Kubernetes 评测工作流](./K8S%20Bench/README.md)：部署微服务、注入真实故障、启动负载并执行评测。
-- [主机运维基准](./HostOpsBench/README.md)：覆盖 IO 高负载、日志洪泛、CPU 饱和、文件描述符泄漏、上游 HTTP 故障与 systemd 配置错误等场景。
+- [Kubernetes evaluation workflow](./K8S%20Bench/README.md): deploys microservices, injects real faults, runs workloads, and performs evaluation.
+- [Host operations benchmark](./HostOpsBench/README.md): covers I/O pressure, log flooding, CPU saturation, file-descriptor leaks, upstream HTTP failures, and systemd configuration errors.
 
-## 产品演示
+## Product Demo
 
 https://github.com/user-attachments/assets/70a5da70-d36d-42d0-9c52-24e92a4fecb3
 
-## 开源致谢
+## Open Source Acknowledgements
 
-NimbusOps 在开源社区成果之上构建，并向所有原作者和贡献者致谢：
+NimbusOps is built on open-source work. We thank the original authors and contributors:
 
-- **Agent Runtime**：基于 [HKUDS/nanobot](https://github.com/HKUDS/nanobot) 的设计与部分实现进行适配，遵循 MIT License。
-- **Kubernetes 评测基线**：基于 [Microsoft AIOpsLab](https://github.com/microsoft/AIOpsLab) 改造，遵循 MIT License；相关原始许可证和 NOTICE 已保留在 [`K8S Bench`](./K8S%20Bench) 目录中。
-- **操作护栏**：`Action Guardrails` 中的部分实现改编自 [forge-guardrails](https://github.com/antoinezambelli/forge)，遵循 MIT License。
+- **Agent Runtime**: adapted from the design and selected implementation of [HKUDS/nanobot](https://github.com/HKUDS/nanobot), under the MIT License.
+- **Kubernetes evaluation baseline**: adapted from [Microsoft AIOpsLab](https://github.com/microsoft/AIOpsLab), under the MIT License. The original license and NOTICE are retained in [`K8S Bench`](./K8S%20Bench).
+- **Action Guardrails**: selected implementation was adapted from [forge-guardrails](https://github.com/antoinezambelli/forge), under the MIT License.
 
-完整的第三方组件、版权归属和许可证文本见 [THIRD_PARTY_NOTICES.md](./THIRD_PARTY_NOTICES.md)。
+See [THIRD_PARTY_NOTICES.md](./THIRD_PARTY_NOTICES.md) for complete third-party component, copyright, and license information.
 
-## 许可证
+## License
 
-NimbusOps 自有代码采用 [Apache License 2.0](./LICENSE) 发布；第三方组件继续遵循其各自的许可证与署名要求。
+NimbusOps original code is released under the [Apache License 2.0](./LICENSE). Third-party components remain subject to their respective licenses and attribution requirements.
